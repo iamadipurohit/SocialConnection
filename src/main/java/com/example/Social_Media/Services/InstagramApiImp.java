@@ -6,13 +6,14 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.Map;
 
-@Service
+@Component
 public class InstagramApiImp implements SocialMediaApi {
 
     @Autowired
@@ -30,12 +31,16 @@ public class InstagramApiImp implements SocialMediaApi {
         HttpEntity<?> entity = new HttpEntity<>(headers);
 
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(baseurl);
 
-        System.out.println(builder.buildAndExpand(urlParams).toUri());
+        try {
+            UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(baseurl);
 
-
-        return restTemplate.exchange(builder.buildAndExpand(urlParams).toUri(), HttpMethod.GET, entity, String.class);
+            return restTemplate.exchange(builder.buildAndExpand(urlParams).toUri(), HttpMethod.GET, entity, String.class);
+        } catch (Exception e) {
+            System.err.println("An error occurred while making the API request: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

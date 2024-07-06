@@ -30,12 +30,14 @@ public class FacebookApiImp implements SocialMediaApi{
         urlParams.put("name", name);
         HttpEntity<?> entity = new HttpEntity<>(headers);
 
+        try {
+            UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(baseurl);
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(baseurl);
-
-        System.out.println(builder.buildAndExpand(urlParams).toUri());
-
-
-        return restTemplate.exchange(builder.buildAndExpand(urlParams).toUri(), HttpMethod.GET, entity, String.class);
+            return restTemplate.exchange(builder.buildAndExpand(urlParams).toUri(), HttpMethod.GET, entity, String.class);
+        } catch (Exception e) {
+            System.err.println("An error occurred while making the API request: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
     }
 }

@@ -20,27 +20,31 @@ public class InstaChecker {
    InstagramApiImp instagramApiImp;
     public boolean checkInstagramActivity(String domain) throws InterruptedException, JsonProcessingException, JsonProcessingException {
 
-		ResponseEntity<String> response = instagramApiImp.SocailMediaApigetbydomainname(domain);
+		try {
+			ResponseEntity<String> response = instagramApiImp.SocailMediaApigetbydomainname(domain);
 
-		// Parse JSON response
-		ObjectMapper objectMapper = new ObjectMapper();
-		JsonNode rootNode = objectMapper.readTree(response.getBody());
-		JsonNode postsNode = rootNode.path("data").path("items");
+			// Parse JSON response
+			ObjectMapper objectMapper = new ObjectMapper();
+			JsonNode rootNode = objectMapper.readTree(response.getBody());
 
-		LocalDate sixMonthsAgo = LocalDate.now().minusMonths(6);
-           if(postsNode.size()==0)
-		   {
-			   return false;
-		   }
+			JsonNode postsNode = rootNode.path("data").path("items");
 
+			LocalDate sixMonthsAgo = LocalDate.now().minusMonths(6);
+			if (postsNode.size() == 0) {
+				System.out.println("No posts found.");
+				return false;
+			}
 			long createdAtTimestamp = postsNode.get(0).path("caption").path("created_at").asLong();
 			LocalDateTime postDate = LocalDateTime.ofInstant(Instant.ofEpochSecond(createdAtTimestamp), ZoneId.systemDefault());
-			System.out.println("Created At: " + postDate);
 
 			// Check if the post date is within the last six months
 			if (postDate.toLocalDate().isAfter(sixMonthsAgo)) {
 				return true;
 			}
-			return false;
+		} catch (Exception e) {
+			System.err.println("An error occurred while checking Instagram activity: " + e.getMessage());
+			e.printStackTrace();
 		}
+		return false;
+	}
 }

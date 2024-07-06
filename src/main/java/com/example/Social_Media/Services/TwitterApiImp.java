@@ -19,7 +19,7 @@ public class TwitterApiImp implements SocialMediaApi{
 
     @Override
     public ResponseEntity<String> SocailMediaApigetbydomainname(String name) {
-        String baseurl = "\"https://twitter154.p.rapidapi.com/search/search/continuation?query={name}&section=top&min_retweets=20&limit=5&continuation_token=DAACCgACF_Sz76EAJxAKAAMX9LPvoP_Y8AgABAAAAAILAAUAAABQRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUFVWDlJWmx4cHZBZkJmMG5RNUxHdUVQRi9TdTZPSGJzQ0VYOUp6Y3psdUJ3UmYwbFE3Q1dxQWsIAAYAAAAACAAHAAAAAAwACAoAARf0hmXGm8B8AAAA&min_likes=20&start_date=2022-01-01&language=en\"";
+        String baseurl = "https://twitter154.p.rapidapi.com/search/search/continuation?query={name}&section=top&min_retweets=20&limit=5&continuation_token=DAACCgACF_Sz76EAJxAKAAMX9LPvoP_Y8AgABAAAAAILAAUAAABQRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUFVWDlJWmx4cHZBZkJmMG5RNUxHdUVQRi9TdTZPSGJzQ0VYOUp6Y3psdUJ3UmYwbFE3Q1dxQWsIAAYAAAAACAAHAAAAAAwACAoAARf0hmXGm8B8AAAA&min_likes=20&start_date=2022-01-01&language=en";
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-RapidAPI-Host", "twitter154.p.rapidapi.com");
         headers.set("X-RapidAPI-Key", "d2ffcb2c1cmsha8601ed199c395ap1adb45jsne15212e2821b");
@@ -28,12 +28,14 @@ public class TwitterApiImp implements SocialMediaApi{
         urlParams.put("name", name);
         HttpEntity<?> entity = new HttpEntity<>(headers);
 
+        try {
+            UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(baseurl);
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(baseurl);
-
-        System.out.println(builder.buildAndExpand(urlParams).toUri());
-
-
-        return restTemplate.exchange(builder.buildAndExpand(urlParams).toUri(), HttpMethod.GET, entity, String.class);
+            return restTemplate.exchange(builder.buildAndExpand(urlParams).toUri(), HttpMethod.GET, entity, String.class);
+        } catch (Exception e) {
+            System.err.println("An error occurred while making the API request: " + e.getMessage());
+            e.printStackTrace();
+            return null; // or you can return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred");
+        }
     }
 }

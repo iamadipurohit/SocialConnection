@@ -21,26 +21,30 @@ public class TwitterChecker {
     TwitterApiImp twitterApiImp;
     public boolean checkTwitterActivity(String domain) throws InterruptedException, JsonProcessingException, JsonProcessingException {
 
-        ResponseEntity<String> response = twitterApiImp.SocailMediaApigetbydomainname(domain);
+        try {
+            ResponseEntity<String> response = twitterApiImp.SocailMediaApigetbydomainname(domain);
 
-        // Parse JSON response
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode rootNode = objectMapper.readTree(response.getBody());
-        JsonNode postsNode = rootNode.path("results");
+            // Parse JSON response
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(response.getBody());
+            System.out.println(rootNode);
+            JsonNode postsNode = rootNode.path("results");
 
-        LocalDate sixMonthsAgo = LocalDate.now().minusMonths(6);
-        if(postsNode.size()==0)
-        {
-            return false;
+            LocalDate sixMonthsAgo = LocalDate.now().minusMonths(6);
+            if (postsNode.size() == 0) {
+                return false;
+            }
+            System.out.println(postsNode.get(0));
+            long createdAtTimestamp = postsNode.get(0).path("timestamp").asLong();
+            LocalDateTime postDate = LocalDateTime.ofInstant(Instant.ofEpochSecond(createdAtTimestamp), ZoneId.systemDefault());
+            System.out.println("Created At: " + postDate);
+
+            // Check if the post date is within the last six months
+            return postDate.toLocalDate().isAfter(sixMonthsAgo);
+        } catch (Exception e) {
+            System.err.println("An error occurred while checking Twitter activity: " + e.getMessage());
+            e.printStackTrace();
+            return false; // or handle the error as appropriate
         }
-        long createdAtTimestamp = postsNode.get(0).path("timestamp").asLong();
-        LocalDateTime postDate = LocalDateTime.ofInstant(Instant.ofEpochSecond(createdAtTimestamp), ZoneId.systemDefault());
-        System.out.println("Created At: " + postDate);
-
-        // Check if the post date is within the last six months
-        if (postDate.toLocalDate().isAfter(sixMonthsAgo)) {
-            return true;
-        }
-        return false;
     }
 }
