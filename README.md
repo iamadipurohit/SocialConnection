@@ -41,3 +41,31 @@ Before running the application, ensure you have the following installed:
    ```bash
    mvn spring-boot:run
 2. The application will start on http://localhost:8080.
+
+## Testing the Tool
+1. Endpoint
+   ```bash
+   GET http://localhost:8080/api/checkActivity
+2. Parameters
+   ```bash
+   domain: The domain name for which you want to check social media activity.
+3. Example Request
+   ```bash
+   GET http://localhost:8080/api/checkActivity?domain=zomato.com
+4. Example Response
+   ```bash
+   {
+    "instagram": {
+        "url": "https://www.instagram.com/zomato",
+        "active": true
+    },
+    "tiktok": {
+        "url": "https://www.tiktok.com/@zomatoindia",
+        "active": false
+    },
+    "twitter": {
+        "url": "https://twitter.com/zomato",
+        "active": true
+    }
+   }
+
