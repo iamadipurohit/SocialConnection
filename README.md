@@ -4,7 +4,7 @@
 The **Social Media Activity Checker** is a Spring Boot application that retrieves social media links associated with a given domain name and determines their activity status based on the timestamp of their last post.
 
 ## Features
-- Retrieves social media links (e.g., **Facebook**, **Instagram**, **Twitter**, **TikTok**) associated with a domain.
+- Retrieves social media links (e.g., **Facebook**, **Instagram**, **Twitter**) associated with a domain.
 - Determines if each social media handle has been active within the last 6 months.
 - Displays the status of each handle as either **active** or **inactive**.
 
@@ -68,4 +68,12 @@ Before running the application, ensure you have the following installed:
         "active": true
     }
    }
+
+## Additional Information
+1. Make sure to replace your_rapidapi_key with your actual RapidAPI key in the application.properties file.
+2. Ensure that the API services you are using are active and you have sufficient quota on your RapidAPI account.
+3. If you encounter any issues, check the logs for error messages and ensure your API keys are correct.
+
+## Contact
+ For any questions or issues, please contact iamadipurohit@gmail.com
 
