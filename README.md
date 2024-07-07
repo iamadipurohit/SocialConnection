@@ -34,4 +34,10 @@ Before running the application, ensure you have the following installed:
    rapidapi.facebook.host=axesso-facebook-data-service.p.rapidapi.com
    rapidapi.facebook.key=your_rapidapi_key
    rapidapi.twitter.host=twitter154.p.rapidapi.com
-   rapidapi.twitter.key=your_rapidapi_key   
+   rapidapi.twitter.key=your_rapidapi_key
+
+## Running the Application
+1. Start the Spring Boot application:
+   ```bash
+   mvn spring-boot:run
+2. The application will start on http://localhost:8080.
